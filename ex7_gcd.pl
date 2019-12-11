@@ -1,3 +1,4 @@
-gcd(0, X, X) :- X > 0, !.
-gcd(X, Y, Z) :- X >= Y, X1 is X-Y, gcd(X1, Y, Z).
-gcd(X, Y, Z) :- X < Y, X1 is Y-X, gcd(X1, X, Z).
+gcd(X, 0, X):- !.
+gcd(0, X, X):- !.
+gcd(X, Y, D):- X =< Y, !, Z is Y - X, gcd(X, Z, D).
+gcd(X, Y, D):- gcd(Y, X, D).

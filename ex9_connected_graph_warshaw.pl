@@ -1,21 +1,32 @@
-path(x1, x2).
-path(x2, x3).
-path(x4, x2).
-path(x4, x5).
-path(x5, x6).
+path(a, b).
+path(b, c).
+path(d, b).
+%path(d, e).
+%path(e, f).
 
-kpath(X, Y, _) :-
-    path(X, Y);
-    path(Y, X).
-kpath(X, Y, L) :-
-    memberchk(Z, L) is false, path(X, Z), kpath(Z, Y);
-    path(Z, X), kpath(Z, Y).
+node(X) :- path(X,_).
+node(X) :- path(_,X).
+allnodes(Nodes) :- setof(X, node(X), Nodes).
 
-isConnected([_]).
-isConnected([X,Y|Tail]) :-
-    kpath(X, Y),
-    append([X], Tail, Rest),
-    isConnected(Rest).
+adjacency(AdjM) :-
+    allnodes(L),
+    adjMatrix(L,L,AdjM).
 
-notContain(X, List) :- neg memberchk(X, List).h
-%isConnected([x1,x2,x3,x4,x5,x6]).
+adjMatrix([ ],_,[ ]).
+adjMatrix([H|T],L,[Row|Rows]) :-
+    row_AdjM(H,L,Row),
+    adjMatrix(T,L,Rows).
+
+row_AdjM(_,[ ],[ ]).
+row_AdjM(X,[Y|Ys],[C|Cs]) :-
+    (   path(X,Y)
+     -> C = 1
+     ;  C = 0
+    ),
+    row_AdjM(X,Ys,Cs).
+
+
+warshall(List) :-
+    select([
+
+
